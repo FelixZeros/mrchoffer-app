@@ -31,6 +31,7 @@ export default function LoginScreen({ navigation }) {
       />
 
       <Pressable
+        onPress={() => navigation.navigate("Portal")}
         style={({ pressed }) =>
           tw`${
             pressed ? "bg-[#fad371]" : "bg-[#FFCB44]"
