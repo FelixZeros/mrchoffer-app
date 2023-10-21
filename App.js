@@ -9,8 +9,6 @@ import FirstRegisterScreen from "./screens/register/FirstRegisterScreen";
 import SecondRegisterScreen from "./screens/register/SecondRegisterScreen";
 import ModalCamera from "./components/ModalCamera";
 import ThirdRegisterScreen from "./screens/register/ThirdRegisterScreen";
-import { CompaniesScreen } from "./screens/companies/CompaniesScreen";
-
 import { Header } from "./components/Header";
 import { PortalScreen } from "./screens/portal/PortalScreen";
 import { CompanyScreen } from "./screens/portal/companies/company/CompanyScreen";
