@@ -8,8 +8,10 @@ import LoginScreen from "./screens/login";
 import FirstRegisterScreen from "./screens/register/FirstRegisterScreen";
 import SecondRegisterScreen from "./screens/register/SecondRegisterScreen";
 import ModalCamera from "./components/ModalCamera";
-import { Header } from "./components/Header";
 import ThirdRegisterScreen from "./screens/register/ThirdRegisterScreen";
+import { Header } from "./components/Header";
+import { PortalScreen } from "./screens/portal/PortalScreen";
+import { CompanyScreen } from "./screens/portal/companies/company/CompanyScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +27,20 @@ function App() {
                   <Stack.Screen
                     name="Login"
                     component={LoginScreen}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Portal"
+                    component={PortalScreen}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Company"
+                    component={CompanyScreen}
                     options={{
                       headerShown: false,
                     }}
