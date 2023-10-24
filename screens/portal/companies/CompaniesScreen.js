@@ -1,11 +1,13 @@
 import tw from "twrnc";
 import * as React from "react";
-import { Button, View, Text, Image } from "react-native";
+import { Button, View, Text, Image, ScrollView, Pressable } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FabSelectCompany } from "../components/fab-select-company";
 import axios from "axios";
 import authContext from "../../../context/Auth/AuthContext";
 import { BACKEND_URL } from "@env";
+import { RequestCard } from "./company/components/request-card";
+import { ActiveCard } from "./company/components/active-card";
 const NothingToSHow = () => {
   return (
     <View
@@ -28,23 +30,43 @@ export const CompaniesScreen = ({ navigation }) => {
   const Tab = createBottomTabNavigator();
   const { user } = React.useContext(authContext);
   const [requests, setRequests] = React.useState([]);
+
   async function GetRequestCompany() {
     await axios
-      .get(`${BACKEND_URL}/api/request-driver-company/driver/1`)
-      .then((res) => setRequests(res.data))
+      .get(`${BACKEND_URL}/api/request-driver-company/driver/${user.driver.id}`)
+      .then((res) => setRequests(...requests, res.data))
       .catch((err) => console.log(err));
   }
 
   React.useEffect(() => {
     GetRequestCompany();
+    setInterval(() => GetRequestCompany(), 10000);
   }, []);
 
   const ActiveTab = () => {
-    return <NothingToSHow />;
+    return requests.length === 0 ? (
+      <NothingToSHow />
+    ) : (
+      <ScrollView style={tw`mt-40`}>
+        {requests
+          .filter((requests) => requests.status == 2)
+          .map((requests) => (
+            <ActiveCard key={requests.id} request={requests}></ActiveCard>
+          ))}
+      </ScrollView>
+    );
   };
 
   const RequestTab = () => {
-    return requests.length == 0 ? <NothingToSHow /> : requests.map( requests => <Text>{JSON.stringify(requests)} </Text>);
+    return requests.length == 0 ? (
+      <NothingToSHow />
+    ) : (
+      <ScrollView style={tw`mt-40`}>
+        {requests.map((request) => (
+          <RequestCard key={request.id} request={request}> </RequestCard>
+        ))}
+      </ScrollView>
+    );
   };
 
   return (

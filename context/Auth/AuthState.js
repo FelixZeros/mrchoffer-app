@@ -20,11 +20,10 @@ const AuthState = (props) => {
         password,
       });
       if (!response) return false;
-      const { user } = response.data;
-      
+      const { driver } = response.data.user;
       dispatch({
         type: "LOGIN",
-        payload: { user },
+        payload: { driver },
       });
 
       return true;
