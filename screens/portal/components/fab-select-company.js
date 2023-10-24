@@ -14,13 +14,10 @@ export const FabSelectCompany = ({ router }) => {
 
 
     const getCompanies = async () => {
-        console.log(companies)
         try {
             setLoading(true)
             const response = await axios.get(`${BACKEND_URL}/api/get-companys`)
-
             if (!response) return;
-
             setCompanies(response.data);
         } catch (err) {
             console.log(err);
@@ -59,9 +56,9 @@ export const FabSelectCompany = ({ router }) => {
                 {loading ? <Text> Cargando... </Text> : companies.length > 1 ?
                     <ScrollView style={tw`absolute w-full max-h-full  mt-15`}>
                         {companies.map(company => (
-                            <Pressable onPress={() => {
+                            <Pressable key={company} onPress={() => {
                                 setIsOpen(false)
-                                router.navigate("Company")}} style={tw`border-b mx-5 py-3 `}>
+                                router.navigate("Company", { company })}} style={tw`border-b mx-5 py-3 `}>
                                 <Text style={tw`font-bold`}>{company.name}</Text>
                             </Pressable>
                         ))}

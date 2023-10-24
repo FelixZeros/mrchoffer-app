@@ -8,6 +8,8 @@ const useLogin = () => {
   
   async function onSubmit(){
     const isValidLogin = await login(email, password)
+    if (isValidLogin) navigation.navigate("Portal")
+    else setError(true)
   }
 
   return {
