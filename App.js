@@ -12,6 +12,7 @@ import ThirdRegisterScreen from "./screens/register/ThirdRegisterScreen";
 import { Header } from "./components/Header";
 import { PortalScreen } from "./screens/portal/PortalScreen";
 import { CompanyScreen } from "./screens/portal/companies/company/CompanyScreen";
+import { DriverTripScreen } from "./screens/portal/request/DriverTripScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ function App() {
                     component={LoginScreen}
                     options={{
                       headerShown: false,
+                      headerBackTitleVisible: false,
                     }}
                   />
                   <Stack.Screen
@@ -70,6 +72,17 @@ function App() {
                   <Stack.Screen
                     name="thirdSectionRegister"
                     component={ThirdRegisterScreen}
+                    options={{
+                      headerTitle: (props) => <Header {...props} />,
+                      headerBackTitleVisible: false,
+                      headerStyle: {
+                        backgroundColor: "#FFCB44",
+                      },
+                    }}
+                  />
+                  <Stack.Screen
+                    name="DriverTrip"
+                    component={DriverTripScreen}
                     options={{
                       headerTitle: (props) => <Header {...props} />,
                       headerBackTitleVisible: false,
