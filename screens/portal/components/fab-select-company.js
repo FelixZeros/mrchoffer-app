@@ -21,6 +21,7 @@ export const FabSelectCompany = ({ router }) => {
   const getCompanies = async () => {
     try {
       setLoading(true);
+      console.log(`${BACKEND_URL}`)
       const response = await axios.get(`${BACKEND_URL}/api/get-companys`);
       if (!response) return;
       setCompanies(response.data);

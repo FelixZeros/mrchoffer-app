@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
+import { BACKEND_URL } from "@env";
 import AuthContext from "./AuthContext";
 import AuthReducer from "./AuthReducer";
-import { BACKEND_URL } from "@env";
 import axios from "axios";
 
 const AuthState = (props) => {
@@ -15,6 +15,7 @@ const AuthState = (props) => {
 
   const login = async (email, password) => {
     try {
+      console.log(`${BACKEND_URL}/api/auth`)
       const response = await axios.post(`${BACKEND_URL}/api/auth`, {
         email,
         password,

@@ -182,13 +182,13 @@ const useRegisterForm = (navigation) => {
 
       setError({});
 
-      const answer = nextSection(section, {
+      const res = nextSection(section, {
         phone,
         email,
         password,
       });
 
-      console.log(answer);
+      return res
     }
   };
 

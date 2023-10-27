@@ -1,12 +1,10 @@
 import {
-  Button,
   Modal,
   Pressable,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { PortalTabs } from "../../components/portal-tabs";
 import { BACKEND_URL } from "@env";
 import tw from "twrnc";
 import { useContext, useState } from "react";

@@ -11,19 +11,24 @@ const RegisterState = (props) => {
   const [state, dispatch] = useReducer(RegisterReducer, initialState);
 
   const sendInfo = async (driver) => {
-    console.log(driver);
-    await fetch(`${BACKEND_URL}/api/create-user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(driver),
-    });
+    try {
+      await fetch(`${BACKEND_URL}/api/create-user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(driver),
+      });
 
-    dispatch({
-      type: "SEND_INFO",
-      payload: { driver },
-    });
+      dispatch({
+        type: "SEND_INFO",
+        payload: { driver },
+      });
+
+      return true;
+    } catch (err) {
+      return false;
+    }
   };
 
   const nextSection = async (section, info) => {
@@ -63,7 +68,15 @@ const RegisterState = (props) => {
         email: info.email,
         password: info.password,
       };
-      return await sendInfo(state.driver);
+      try{
+        await sendInfo(state.driver)
+        console.log('no error')
+        return true;
+      }catch(err){
+        console.log('error')
+        return false
+      }
+      
     }
   };
 
