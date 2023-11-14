@@ -12,6 +12,7 @@ export const PortalTabs = () => {
   return (
     <>
       <Tab.Navigator
+        initialRouteName="Solicitudes"
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,

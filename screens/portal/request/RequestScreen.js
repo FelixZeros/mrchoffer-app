@@ -1,38 +1,41 @@
 import { View, Text, ScrollView, Pressable, Image } from "react-native";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import authContext from "../../../context/Auth/AuthContext";
 import io from "socket.io-client";
 import tw from "twrnc";
 
 export const RequestScreen = ({ navigation }) => {
+  const { socket, setSocket } = useContext(authContext);
   const [info, setInfo] = useState([]);
+
   useEffect(() => {
-    const socket = io("http://192.168.0.101:50001");
-    socket.on("server:request-trip", (trips) => {
-      setInfo(trips);
-    });
+    if (socket) return;
+    const socket = io("http://192.168.0.103:50001");
+    setSocket(socket);
   }, []);
 
-  const handleAccept = useCallback((id) => {
-    const socket = io("http://192.168.0.101:50001");
-    socket.emit("client:accept-trip", {
-      id,
-      driverId: 1,
-      status: 2,
-      driverName: "Felix Ochoa",
-      time: "10 minutos",
-      distance: "5 km",
+  useEffect(() => {
+    socket?.on("server:receive-trip", (trip) => {
+      setInfo((prev) => {
+        if (
+          !prev.some(
+            (existingTrip) => existingTrip.startTime === trip.startTime
+          )
+        ) {
+          const updatedInfo = [...prev, trip];
+          if (info.length === 0) {
+            setTimeout(() => {
+              setInfo((prev) =>
+                prev.filter((t) => t.startTime !== trip.startTime)
+              );
+            }, 60 * 1000);
+            return updatedInfo;
+          }
+        }
+        return prev;
+      });
     });
-    navigation.navigate("DriverTrip", {
-      driverInfo: {
-        id,
-        driverId: 1,
-        status: 2,
-        driverName: "Felix Ochoa",
-        time: "10 minutos",
-        distance: "5 km",
-      },
-    });
-  }, []);
+  }, [socket]);
 
   if (info.length === 0)
     return (
@@ -53,57 +56,79 @@ export const RequestScreen = ({ navigation }) => {
 
   return (
     <ScrollView keyboardShouldPersistTaps="never">
-      {info && info.length > 0 && (
+      {info.length > 0 && (
         <View style={tw`mt-5 px-6 pt-6 pb-24 flex flex-col gap-4`}>
           {info.map((trip, index) => (
-            <View style={tw`border rounded-md border-gray-200 p-3`} key={index}>
-              <View style={tw`flex flex-row justify-between`}>
-                <Text style={tw`font-semibold text-md`}>
-                  Solicitud de carrera #{trip.id}
-                </Text>
-                <Text style={tw`font-semibold text-base text-gray-400`}>
-                  {trip.startTime}
-                </Text>
-              </View>
-              <Text style={tw`font-semibold text-lg`}>{trip.destination}</Text>
-              <Text style={tw`font-normal text-md text-gray-500`}>
-                {trip.comment}
-              </Text>
-              <View style={tw`mt-4 flex flex-row justify-between`}>
-                <Text style={tw`font-semibold text-md`}>
-                  {trip.genderPassenger}
-                </Text>
-                <View style={tw`flex flex-row`}>
-                  <Text style={tw`font-normal text-md text-gray-500`}>
-                    {trip.paymentMethod}: $
-                  </Text>
-                  <Text style={tw`font-normal text-md text-gray-500`}>
-                    {trip.price}
-                  </Text>
-                  <Text style={tw`font-normal text-md text-gray-500 ml-4`}>
-                    {trip.distance}
-                  </Text>
+            <Pressable
+              style={tw`border rounded-md border-gray-200 px-3 py-2`}
+              key={index}
+              onPress={() => {
+                setInfo(
+                  info.filter(
+                    (trip) => trip.startTime !== info[index].startTime
+                  )
+                );
+                navigation.navigate("InfoRequestScreen", {
+                  requestInfo: trip,
+                });
+              }}
+            >
+              <Text style={tw`font-semibold text-base`}>{trip.startTime}</Text>
+              <View style={tw`flex flex-row gap-2 items-center`}>
+                <View
+                  style={tw`flex flex-row w-4 h-4 rounded-full bg-[#FFB800] justify-center items-center`}
+                >
+                  <Text style={tw` font-bold text-white`}>A</Text>
                 </View>
+                <Text style={tw`font-bold text-lg`}>{trip.textOrigin}</Text>
               </View>
-              <View style={tw`mt-4 flex flex-row justify-between`}>
-                <Pressable
-                  style={tw`w-[120px] h-[40px] bg-[#FFCB44] rounded-xl flex flex-col justify-center`}
-                  onPress={() => handleAccept(trip.id)}
+              <View style={tw`flex flex-row gap-2 items-center`}>
+                <View
+                  style={tw`flex flex-row w-4 h-4 rounded-full bg-[#D2D2D2] justify-center items-center`}
                 >
-                  <Text style={tw`text-center font-bold text-lg`}>Aceptar</Text>
-                </Pressable>
-                <Pressable
-                  style={tw`w-[120px] h-[40px] bg-black rounded-xl flex flex-col justify-center`}
-                  onPress={() => handleAccept(trip.id)}
-                >
-                  <Text
-                    style={tw`text-center font-bold text-lg text-[#FFCB44]`}
-                  >
-                    Rechazar
-                  </Text>
-                </Pressable>
+                  <Text style={tw` font-bold text-[#292929]`}>B</Text>
+                </View>
+                <Text style={tw`font-normal text-lg`}>
+                  {trip.textDestination}
+                </Text>
               </View>
-            </View>
+              <View style={tw`flex flex-row items-center gap-2`}>
+                <Text style={tw`font-semibold text-xl`}>{trip.price} COP</Text>
+                {trip.paymentMethod === "Nequi" && (
+                  <Image
+                    source={require("../../../assets/nequi.png")}
+                    resizeMode="contain"
+                    style={{
+                      width: 18,
+                      height: 18,
+                    }}
+                  />
+                )}
+                {trip.paymentMethod === "Daviplata" && (
+                  <Image
+                    source={require("../../../assets/davivienda.png")}
+                    resizeMode="contain"
+                    style={{
+                      width: 18,
+                      height: 18,
+                    }}
+                  />
+                )}
+                {trip.paymentMethod === "Bancolombia" && (
+                  <Image
+                    source={require("../../../assets/bancolombia.png")}
+                    resizeMode="contain"
+                    style={{
+                      width: 18,
+                      height: 18,
+                    }}
+                  />
+                )}
+                <Text style={tw`font-normal text-sm text-gray-500`}>
+                  {trip.distance}
+                </Text>
+              </View>
+            </Pressable>
           ))}
         </View>
       )}

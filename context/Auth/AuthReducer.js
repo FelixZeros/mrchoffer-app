@@ -10,6 +10,16 @@ export default (state, action) => {
         ...state,
         user: null,
       };
+    case "SET_USER_LOCAL":
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case "SET_SOCKET":
+      return {
+        ...state,
+        socket: action.payload,
+      };
     default:
       return state;
   }

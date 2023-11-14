@@ -63,7 +63,9 @@ export const CompaniesScreen = ({ navigation }) => {
     ) : (
       <ScrollView style={tw`mt-40`}>
         {requests.map((request) => (
-          <RequestCard key={request.id} request={request}> </RequestCard>
+          <RequestCard key={request.id} request={request}>
+            {" "}
+          </RequestCard>
         ))}
       </ScrollView>
     );

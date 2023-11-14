@@ -5,6 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import AuthProvider from "./context/Auth/AuthState";
 import RegisterProvider from "./context/Register/RegisterState";
 import LoginScreen from "./screens/login";
+import ScreenRequesTrip from "./screens/portal/request/RequestTripScreen";
 import FirstRegisterScreen from "./screens/register/FirstRegisterScreen";
 import SecondRegisterScreen from "./screens/register/SecondRegisterScreen";
 import ModalCamera from "./components/ModalCamera";
@@ -12,7 +13,8 @@ import ThirdRegisterScreen from "./screens/register/ThirdRegisterScreen";
 import { Header } from "./components/Header";
 import { PortalScreen } from "./screens/portal/PortalScreen";
 import { CompanyScreen } from "./screens/portal/companies/company/CompanyScreen";
-import { DriverTripScreen } from "./screens/portal/request/DriverTripScreen";
+import { ScreenSendRequest } from "./screens/portal/request/SendRequestScreen";
+import { RequestScreen } from "./screens/portal/request/RequestScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +30,14 @@ function App() {
                   <Stack.Screen
                     name="Login"
                     component={LoginScreen}
+                    options={{
+                      headerShown: false,
+                      headerBackTitleVisible: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="RequestScreen"
+                    component={RequestScreen}
                     options={{
                       headerShown: false,
                       headerBackTitleVisible: false,
@@ -59,6 +69,14 @@ function App() {
                     }}
                   />
                   <Stack.Screen
+                    name="startRequest"
+                    component={ScreenSendRequest}
+                    options={{
+                      headerShown: false,
+                      headerBackTitleVisible: false,
+                    }}
+                  />
+                  <Stack.Screen
                     name="secondSectionRegister"
                     component={SecondRegisterScreen}
                     options={{
@@ -81,14 +99,11 @@ function App() {
                     }}
                   />
                   <Stack.Screen
-                    name="DriverTrip"
-                    component={DriverTripScreen}
+                    name="InfoRequestScreen"
+                    component={ScreenRequesTrip}
                     options={{
-                      headerTitle: (props) => <Header {...props} />,
+                      headerShown: false,
                       headerBackTitleVisible: false,
-                      headerStyle: {
-                        backgroundColor: "#FFCB44",
-                      },
                     }}
                   />
                 </Stack.Group>
