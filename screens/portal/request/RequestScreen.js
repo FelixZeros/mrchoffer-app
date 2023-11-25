@@ -1,39 +1,100 @@
 import { View, Text, ScrollView, Pressable, Image } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import authContext from "../../../context/Auth/AuthContext";
+import { SOCKET_URL, BACKEND_URL } from "@env";
 import io from "socket.io-client";
 import tw from "twrnc";
+import { ModalNoSaldo } from "../../../components/Modals";
 
 export const RequestScreen = ({ navigation }) => {
-  const { socket, setSocket } = useContext(authContext);
+  const { socket, setSocket, user } = useContext(authContext);
   const [info, setInfo] = useState([]);
+  const [saldoDriver, setSaldoDriver] = useState(0);
+  const [isOpenNoSaldo, setIsOpenNoSaldo] = useState(false);
+
+  const getSaldoDriver = async (trip) => {
+    const response = await fetch(
+      `${BACKEND_URL}/api/driverCompany/getBalance`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyId: trip?.companyId,
+          driverId: user?.id ?? user?.driver?.id,
+        }),
+      }
+    );
+
+    const { amountTotal } = await response.json();
+    const responseJSON = await fetch(
+      `${BACKEND_URL}/api/get-trips-by-driver-in-company/${
+        user?.id ?? user?.driver?.id
+      }/${trip?.companyId}
+        `
+    );
+
+    const { handlingFee } = await responseJSON.json();
+
+    return amountTotal - handlingFee;
+  };
+
+  async function getTrips(trip) {
+    const response = await fetch(
+      `${BACKEND_URL}/api/drivers/${user?.id ?? user?.driver?.id}`
+    );
+    const responseJSON = await response.json();
+
+    const data = responseJSON?.driver_companies?.filter((company) => {
+      return company?.companyId === trip?.companyId;
+    });
+    console.log("test", data[0]);
+
+    if (data[0].length === 0) {
+      return null;
+    } else {
+      if (data[0].status === 5 || data[0].status === 4) {
+        return null;
+      } else {
+        console.log("isOk");
+        return data[0];
+      }
+    }
+  }
 
   useEffect(() => {
     if (socket) return;
-    const socket = io("http://192.168.0.103:50001");
+    const socket = io(SOCKET_URL);
     setSocket(socket);
   }, []);
 
+  console.log(saldoDriver);
+
   useEffect(() => {
-    socket?.on("server:receive-trip", (trip) => {
-      setInfo((prev) => {
-        if (
-          !prev.some(
-            (existingTrip) => existingTrip.startTime === trip.startTime
-          )
-        ) {
-          const updatedInfo = [...prev, trip];
-          if (info.length === 0) {
-            setTimeout(() => {
-              setInfo((prev) =>
-                prev.filter((t) => t.startTime !== trip.startTime)
-              );
-            }, 60 * 1000);
-            return updatedInfo;
+    socket?.on("server:receive-trip", async (trip) => {
+      const company = await getTrips(trip);
+      if (company?.companyId === trip?.companyId) {
+        setSaldoDriver(await getSaldoDriver(trip));
+        setInfo((prev) => {
+          if (
+            !prev.some(
+              (existingTrip) => existingTrip.startTime === trip.startTime
+            )
+          ) {
+            const updatedInfo = [...prev, trip];
+            if (info.length === 0) {
+              setTimeout(() => {
+                setInfo((prev) =>
+                  prev.filter((t) => t.startTime !== trip.startTime)
+                );
+              }, 60 * 1000);
+              return updatedInfo;
+            }
           }
-        }
-        return prev;
-      });
+          return prev;
+        });
+      }
     });
   }, [socket]);
 
@@ -56,6 +117,7 @@ export const RequestScreen = ({ navigation }) => {
 
   return (
     <ScrollView keyboardShouldPersistTaps="never">
+      <ModalNoSaldo isOpen={isOpenNoSaldo} setIsOpen={setIsOpenNoSaldo} />
       {info.length > 0 && (
         <View style={tw`mt-5 px-6 pt-6 pb-24 flex flex-col gap-4`}>
           {info.map((trip, index) => (
@@ -63,14 +125,18 @@ export const RequestScreen = ({ navigation }) => {
               style={tw`border rounded-md border-gray-200 px-3 py-2`}
               key={index}
               onPress={() => {
-                setInfo(
-                  info.filter(
-                    (trip) => trip.startTime !== info[index].startTime
-                  )
-                );
-                navigation.navigate("InfoRequestScreen", {
-                  requestInfo: trip,
-                });
+                if (saldoDriver > 0) {
+                  setInfo(
+                    info.filter(
+                      (trip) => trip.startTime !== info[index].startTime
+                    )
+                  );
+                  navigation.navigate("InfoRequestScreen", {
+                    requestInfo: trip,
+                  });
+                } else {
+                  setIsOpenNoSaldo(true);
+                }
               }}
             >
               <Text style={tw`font-semibold text-base`}>{trip.startTime}</Text>

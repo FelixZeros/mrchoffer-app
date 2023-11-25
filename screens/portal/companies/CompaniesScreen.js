@@ -3,15 +3,15 @@ import * as React from "react";
 import { Button, View, Text, Image, ScrollView, Pressable } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FabSelectCompany } from "../components/fab-select-company";
-import axios from "axios";
 import authContext from "../../../context/Auth/AuthContext";
 import { BACKEND_URL } from "@env";
 import { RequestCard } from "./company/components/request-card";
 import { ActiveCard } from "./company/components/active-card";
+
 const NothingToSHow = () => {
   return (
     <View
-      style={tw`self-center items-center gap-4 h-full w-full justify-center`}
+      style={tw`self-center items-center gap-4 h-full w-full justify-center mt-20`}
     >
       <Image
         source={require("../../../assets/mailbox.png")}
@@ -32,51 +32,79 @@ export const CompaniesScreen = ({ navigation }) => {
   const [requests, setRequests] = React.useState([]);
 
   async function GetRequestCompany() {
-    await axios
-      .get(`${BACKEND_URL}/api/request-driver-company/driver/${user.driver.id}`)
-      .then((res) => setRequests(...requests, res.data))
-      .catch((err) => console.log(err));
+    await fetch(
+      `${BACKEND_URL}/api/request-driver-company/driver/${
+        user?.id ?? user?.driver?.id
+      }`
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        setRequests(json);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
+
+  const handleRefresh = () => {
+    GetRequestCompany();
+  };
 
   React.useEffect(() => {
     GetRequestCompany();
-    setInterval(() => GetRequestCompany(), 10000);
   }, []);
 
-  const ActiveTab = () => {
+  const ActiveTab = ({ navigation }) => {
     return requests.length === 0 ? (
       <NothingToSHow />
     ) : (
       <ScrollView style={tw`mt-40`}>
         {requests
-          .filter((requests) => requests.status == 2)
+          .filter((requests) => requests.status == 2 || requests.status == 5)
           .map((requests) => (
-            <ActiveCard key={requests.id} request={requests}></ActiveCard>
+            <ActiveCard
+              key={requests.id}
+              request={requests}
+              handleRefresh={handleRefresh}
+              navigation={navigation}
+            />
           ))}
+        {requests.filter((requests) => requests.status == 2).length === 0 && (
+          <NothingToSHow />
+        )}
       </ScrollView>
     );
   };
 
   const RequestTab = () => {
-    return requests.length == 0 ? (
-      <NothingToSHow />
-    ) : (
+    console.log(requests);
+    return (
       <ScrollView style={tw`mt-40`}>
-        {requests.map((request) => (
-          <RequestCard key={request.id} request={request}>
-            {" "}
-          </RequestCard>
-        ))}
+        {requests.map((request) => {
+          if (request?.status === 1) {
+            return (
+              <RequestCard
+                key={request.id}
+                request={request}
+                handleRefresh={handleRefresh}
+              />
+            );
+          }
+        })}
+        {requests.filter((requests) => requests.status == 1).length === 0 && (
+          <NothingToSHow />
+        )}
       </ScrollView>
     );
   };
 
   return (
-    <View style={tw`h-full w-full justify-center`}>
-      <View style={tw`h-full w-full justify-center `}>
+    <View style={tw`h-full w-full justify-center border-none`}>
+      <View style={tw`h-full w-full justify-center border-none`}>
         <Tab.Navigator
           screenOptions={{
             headerShown: false,
+            headerBackTitleVisible: false,
             tabBarShowLabel: false,
             tabBarStyle: tw`absolute top-[100px] bg-transparent`,
           }}
@@ -84,37 +112,43 @@ export const CompaniesScreen = ({ navigation }) => {
           <Tab.Screen
             name="Activas"
             component={ActiveTab}
+            listeners={{
+              focus: () => handleRefresh(),
+            }}
             options={{
+              headerShown: false,
+              headerBackTitleVisible: false,
               tabBarIcon: ({ focused }) => (
-                <View
-                  style={`w-fit items-center justify-content-center rounded h-full  p-2`}
+                <Text
+                  style={tw`font-bold ${focused && "text-[#FFCB44]"} text-2xl`}
                 >
-                  <Text style={tw`font-bold ${focused && "text-[#FFCB44]"} `}>
-                    Activas
-                  </Text>
-                </View>
+                  Activas
+                </Text>
               ),
             }}
           ></Tab.Screen>
           <Tab.Screen
             name="Solicitudes"
             component={RequestTab}
+            listeners={{
+              focus: () => handleRefresh(),
+            }}
             options={{
+              headerShown: false,
+              headerBackTitleVisible: false,
               tabBarIcon: ({ focused }) => (
-                <View
-                  style={`w-fit items-center justify-content-center rounded h-full  p-2`}
+                <Text
+                  style={tw`font-bold ${focused && "text-[#FFCB44]"} text-2xl`}
                 >
-                  <Text style={tw`font-bold ${focused && "text-[#FFCB44]"} `}>
-                    Solicitudes
-                  </Text>
-                </View>
+                  Solicitudes
+                </Text>
               ),
             }}
           ></Tab.Screen>
         </Tab.Navigator>
       </View>
 
-      <FabSelectCompany router={navigation} />
+      <FabSelectCompany navigation={navigation} />
     </View>
   );
 };

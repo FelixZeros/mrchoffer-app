@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Pressable } from "react-native";
+import { SOCKET_URL } from "@env";
 import * as Location from "expo-location";
 import io from "socket.io-client";
 import tw from "twrnc";
@@ -10,9 +11,10 @@ export const DriverTripScreen = ({ navigation, route }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [pickedPassenger, setPickedPassenger] = useState(false);
   const [isLocationUpdating, setIsLocationUpdating] = useState(true);
+  console.log(driverInfo);
 
   useEffect(() => {
-    const socket = io("http://192.168.0.101:50001");
+    const socket = io(SOCKET_URL);
     if (!isLocationUpdating) {
       return; // No actualices la ubicación si isLocationUpdating es false
     }
@@ -49,7 +51,7 @@ export const DriverTripScreen = ({ navigation, route }) => {
   }, [isLocationUpdating]);
 
   const handleFinishTrip = () => {
-    const socket = io("http://192.168.0.101:50001");
+    const socket = io(SOCKET_URL);
 
     socket.emit("client:finish-trip", {
       id: driverInfo.id,

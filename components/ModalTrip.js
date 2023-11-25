@@ -80,3 +80,30 @@ export const ModalCancelTrip = ({
     </Modal>
   );
 };
+
+export const ModalCancel = ({ info, visible, setVisible, navigation }) => {
+  setTimeout(() => {
+    setVisible(false);
+    navigation.navigate("Portal");
+  }, 10 * 1000);
+
+  return (
+    <Modal animationType="slide" visible={visible} transparent={true}>
+      <ScrollView keyboardShouldPersistTaps="never">
+        <View
+          style={tw`flex flex-col w-full items-center p-7 mt-50 border bg-white rounded-3xl`}
+        >
+          <Text style={tw`text-2xl font-bold text-center`}>
+            El usuario ha cancelado el servicio
+          </Text>
+          <Text style={tw`text-lg font-semibold mt-4`}>
+            El motivo: {info?.comment}
+          </Text>
+          <Text style={tw`text-lg font-semibold mt-4`}>
+            Serás redirigido a la pantalla principal en 10 segundos
+          </Text>
+        </View>
+      </ScrollView>
+    </Modal>
+  );
+};

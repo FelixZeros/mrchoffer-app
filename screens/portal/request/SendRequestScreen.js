@@ -4,9 +4,8 @@ import { Marker } from "react-native-maps";
 import { View, Text, Pressable, Image } from "react-native";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
-import { API_KEY_GOOGLE_MAPS } from "@env";
-import { ModalCancelTrip } from "../../../components/ModalTrip";
-import authContext from "../../../context/Auth/AuthContext";
+import { API_KEY_GOOGLE_MAPS, SOCKET_URL } from "@env";
+import { ModalCancelTrip, ModalCancel } from "../../../components/ModalTrip";
 import tw from "twrnc";
 import io from "socket.io-client";
 
@@ -16,9 +15,11 @@ export const ScreenSendRequest = ({ route, navigation }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLocationUpdating, setIsLocationUpdating] = useState(true);
+  const [cancelVisible, setCancelVisible] = useState(false);
+  const [dataCancel, setDataCancel] = useState(null);
 
   useEffect(() => {
-    const socket = io("http://192.168.0.103:50001");
+    const socket = io(SOCKET_URL);
     setSocket(socket);
     if (!isLocationUpdating) {
       return;
@@ -32,6 +33,12 @@ export const ScreenSendRequest = ({ route, navigation }) => {
       }
 
       let loc = await Location.getCurrentPositionAsync({});
+
+      socket.on(`server:cancel-trip-${requestInfo.idFront}`, (info) => {
+        setCancelVisible(true);
+        setDataCancel(info);
+      });
+
       setLocation(loc);
       await sendLocation(loc);
     };
@@ -130,6 +137,14 @@ export const ScreenSendRequest = ({ route, navigation }) => {
           navigation={navigation}
           requestInfo={requestInfo}
           socket={socket}
+        />
+      )}
+      {cancelVisible && (
+        <ModalCancel
+          info={dataCancel}
+          visible={cancelVisible}
+          setVisible={setCancelVisible}
+          navigation={navigation}
         />
       )}
       <View>

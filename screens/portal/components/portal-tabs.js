@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { CompaniesScreen } from "../companies/CompaniesScreen";
+import { GananciesScreen } from "../ganancies/GananciesScreen";
 import React from "react";
 import { RequestScreen } from "../request/RequestScreen";
 import { ProfileScreen } from "../profile/ProfileScreen";
@@ -23,53 +24,26 @@ export const PortalTabs = () => {
         }}
       >
         <Tab.Screen
-          name="Empresas"
-          component={CompaniesScreen}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <View
-                style={tw`${
-                  /*</Tab.Navigator>focused && 'bg-[#FFCB44]' */ ""
-                } w-fit items-center justify-content-center rounded h-full  p-2`}
-              >
-                <Image
-                  source={require("../../../assets/company-icon.png")}
-                  resizeMode="contain"
-                  style={{
-                    width: 25,
-                    height: 25,
-                    tintColor: focused ? "#FFCB44" : "black",
-                  }}
-                ></Image>
-                <Text style={tw`font-bol ${focused && "text-[#FFCB44]"}d`}>
-                  Empresas
-                </Text>
-              </View>
-            ),
-          }}
-        />
-        <Tab.Screen
           name="Solicitudes"
           component={RequestScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <View
                 style={tw`${
-                  /* focused && 'bg-[#FFCB44]' */ ""
+                  focused && "bg-[#FFCB44]"
                 } w-fit items-center justify-content-center rounded h-full  p-2`}
               >
                 <Image
                   source={require("../../../assets/location-icon.png")}
-                  resizeMode="contain"
+                  resizeMode="cover"
                   style={{
                     width: 25,
                     height: 25,
-                    tintColor: focused ? "#FFCB44" : "black",
+                    tintColor: "black",
+                    zIndex: 100,
                   }}
                 ></Image>
-                <Text style={tw`font-bol ${focused && "text-[#FFCB44]"}d`}>
-                  Solicitudes
-                </Text>
+                <Text style={tw`mt-1 font-medium z-10`}>Solicitudes</Text>
               </View>
             ),
           }}
@@ -81,47 +55,75 @@ export const PortalTabs = () => {
             tabBarIcon: ({ focused }) => (
               <View
                 style={tw`${
-                  /* focused && 'bg-[#FFCB44]' */ ""
-                } w-fit items-center justify-content-center rounded h-full  p-2`}
+                  focused && "bg-[#FFCB44]"
+                } w-fit items-center justify-content-center rounded h-full  py-2 px-6`}
               >
                 <Image
                   source={require("../../../assets/profile-icon.png")}
-                  resizeMode="contain"
+                  resizeMode="cover"
                   style={{
                     width: 25,
                     height: 25,
-                    tintColor: focused ? "#FFCB44" : "black",
+                    tintColor: "black",
+                    zIndex: 100,
                   }}
                 ></Image>
-                <Text style={tw`font-bold ${focused && "text-[#FFCB44]"}`}>
-                  Perfil
-                </Text>
+                <Text style={tw`mt-1 font-medium z-10`}>Perfil</Text>
               </View>
             ),
           }}
         />
         <Tab.Screen
-          name="Ganancias"
-          component={ProfileScreen}
+          name="Empresas"
+          component={CompaniesScreen}
           options={{
+            headerShown: false,
+            headerBackTitleVisible: false,
             tabBarIcon: ({ focused }) => (
               <View
                 style={tw`${
-                  /* focused && 'bg-[#FFCB44]' */ ""
+                  focused && "bg-[#FFCB44]"
+                } w-fit items-center justify-content-center rounded h-full  p-2`}
+              >
+                <Image
+                  source={require("../../../assets/company-icon.png")}
+                  resizeMode="cover"
+                  style={{
+                    width: 25,
+                    height: 25,
+                    tintColor: "black",
+                    zIndex: 100,
+                  }}
+                ></Image>
+                <Text style={tw`mt-1 font-medium z-10`}>Empresas</Text>
+              </View>
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="Ganancias"
+          component={GananciesScreen}
+          options={{
+            headerShown: false,
+            headerBackTitleVisible: false,
+            tabBarIcon: ({ focused }) => (
+              <View
+                style={tw`${
+                  focused && "bg-[#FFCB44]"
                 } w-fit items-center justify-content-center rounded h-full  p-2`}
               >
                 <Image
                   source={require("../../../assets/dollar-icon.png")}
-                  resizeMode="contain"
+                  resizeMode="cover"
                   style={{
                     width: 25,
                     height: 25,
-                    tintColor: focused ? "#FFCB44" : "black",
+                    tintColor: "black",
+                    zIndex: 100,
                   }}
                 ></Image>
-                <Text style={tw`font-bold ${focused && "text-[#FFCB44]"}`}>
-                  Ganancias
-                </Text>
+                <Text style={tw`mt-1 font-medium z-10`}>Ganancias</Text>
               </View>
             ),
           }}

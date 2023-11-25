@@ -10,31 +10,33 @@ import {
   TouchableOpacity,
 } from "react-native";
 import tw from "twrnc";
-import authContext from "../../../../context/Auth/AuthContext";
+import authContext from "../../../context/Auth/AuthContext";
 import { BACKEND_URL } from "@env";
 
-export const CompanyScreen = ({ navigation, route }) => {
-  const { company } = route.params;
-  const [comment, setComment] = React.useState("");
+export default function FirstRegisterScreen({ navigation, route }) {
+  const { request } = route.params;
   const [isOpen, setIsOpen] = React.useState(false);
   const { user } = React.useContext(authContext);
 
-  async function handleSendRequest(company) {
+  async function handleCancelRequest(request) {
     const response = await fetch(`${BACKEND_URL}/api/request-driver-company`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        companyId: company?.id,
+        id: request?.id,
+        companyId: request?.companyId,
         driverId: user?.id ?? user?.driver?.id,
-        status: 1,
-        comment: comment,
+        response: true,
+        status: 5,
+        comment: "El conductor canceló la solicitud",
       }),
     });
     const data = await response.json();
     console.log(data);
     setIsOpen(false);
+    handleRefresh();
     navigation.navigate("Portal");
   }
 
@@ -44,29 +46,35 @@ export const CompanyScreen = ({ navigation, route }) => {
         <View style={tw`flex flex-col gap-2 items-center`}>
           <Image
             source={{
-              uri: company.photo,
+              uri: request.company.photo,
             }}
             width={100}
             height={100}
             style={tw`rounded-full border-[0.5px] border-[#b4b4b4]`}
           />
-          <Text style={tw`text-2xl font-bold uppercase`}>{company.name}</Text>
+          <Text style={tw`text-2xl font-bold uppercase`}>
+            {request.company.name}
+          </Text>
         </View>
         <View style={tw`flex flex-col gap-1 mt-8`}>
-          <Text style={tw`text-xl font-bold`}>{company.typeDocument}:</Text>
-          <Text style={tw`text-lg font-medium `}>{company.document}</Text>
+          <Text style={tw`text-xl font-bold`}>
+            {request.company.typeDocument}:
+          </Text>
+          <Text style={tw`text-lg font-medium `}>
+            {request.company.document}
+          </Text>
           <Text style={tw`text-xl font-bold mt-4`}>Dirección:</Text>
-          <Text style={tw`text-lg font-medium`}>{company.address}</Text>
+          <Text style={tw`text-lg font-medium`}>{request.company.address}</Text>
           <Text style={tw`text-xl font-bold mt-4`}>Activo desde:</Text>
           <Text style={tw`text-lg font-medium`}>
-            Creada: {company.createdAt.split("T")[0]}
+            Creada: {request.company.createdAt.split("T")[0]}
           </Text>
           <TextInput
             editable
             multiline
             numberOfLines={10}
             maxLength={1000}
-            onChangeText={(text) => setComment(text)}
+            value={request?.comment ?? "No hay comentarios..."}
             placeholder="Cuéntanos..."
             style={tw`w-full border-[0.5px] h-[190px] rounded-xl p-4 mt-2`}
           />
@@ -82,12 +90,11 @@ export const CompanyScreen = ({ navigation, route }) => {
           </Pressable>
 
           <Pressable
+            disabled={request?.status == 5 ? true : false}
             onPress={() => setIsOpen(true)}
-            style={tw`w-[125px] h-[50px] bg-[#FFCB44] rounded-xl self-center flex flex-col justify-center`}
+            style={tw`w-[120px] h-[50px] bg-[#FFCB44] rounded-xl self-center flex flex-col justify-center`}
           >
-            <Text style={tw`text-center font-bold text-lg`}>
-              Enviar solicitud
-            </Text>
+            <Text style={tw`text-center font-bold text-xl`}>Retirarme</Text>
           </Pressable>
         </View>
       </View>
@@ -110,8 +117,8 @@ export const CompanyScreen = ({ navigation, route }) => {
             <Text
               style={tw`font-bold self-center text-[5] text-center mb-15 mx-10`}
             >
-              ¡Está a punto de enviar una solicitud de empleo a la empresa
-              <Text style={tw`uppercase`}> {company?.name}!</Text>
+              ¿Estás seguro que quieres retirarte de la empresa{" "}
+              <Text style={tw`uppercase`}>{request?.company?.name}?</Text>
             </Text>
 
             <View
@@ -127,7 +134,7 @@ export const CompanyScreen = ({ navigation, route }) => {
               </Pressable>
 
               <Pressable
-                onPress={() => handleSendRequest(company)}
+                onPress={() => handleCancelRequest(request)}
                 style={tw`w-[120px] h-[40px] bg-[#FFCB44] rounded-xl self-center flex flex-col justify-center`}
               >
                 <Text style={tw`text-center font-bold text-xl`}>Confirmar</Text>
@@ -138,4 +145,4 @@ export const CompanyScreen = ({ navigation, route }) => {
       </Modal>
     </ScrollView>
   );
-};
+}

@@ -2,7 +2,6 @@ import React, { useReducer } from "react";
 import { BACKEND_URL } from "@env";
 import AuthContext from "./AuthContext";
 import AuthReducer from "./AuthReducer";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthState = (props) => {
@@ -17,13 +16,16 @@ const AuthState = (props) => {
 
   const login = async (email, password) => {
     try {
-      console.log(`${BACKEND_URL}/api/auth`);
-      const response = await axios.post(`${BACKEND_URL}/api/auth`, {
-        email,
-        password,
+      const response = await fetch(`${BACKEND_URL}/api/auth`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
-      if (!response) return false;
-      const { driver } = response.data.user;
+      const responseJSON = await response.json();
+      if (!responseJSON) return false;
+      const { driver } = responseJSON.user;
       dispatch({
         type: "LOGIN",
         payload: { driver },
@@ -50,13 +52,13 @@ const AuthState = (props) => {
   const getUserLocal = async () => {
     try {
       const user = await AsyncStorage.getItem("@user");
+
       if (user) {
         dispatch({
           type: "SET_USER_LOCAL",
           payload: JSON.parse(user),
         });
       }
-
       return user;
     } catch (err) {
       console.log(err);

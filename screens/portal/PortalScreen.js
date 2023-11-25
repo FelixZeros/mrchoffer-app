@@ -9,6 +9,7 @@ import { CompaniesScreen } from "./companies/CompaniesScreen";
 import { PortalTabs } from "./components/portal-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Linking from "expo-linking";
+import { FRONTEND_URL } from "@env";
 
 export const PortalScreen = ({ navigation }) => {
   const Tab = createBottomTabNavigator();
@@ -57,21 +58,29 @@ export const PortalScreen = ({ navigation }) => {
               >
                 <Text style={tw`text-2xl font-bold`}>Legal</Text>
                 <Pressable
-                  onPress={() => Linking.openURL("https://www.google.com/")}
+                  onPress={() => Linking.openURL(FRONTEND_URL + "/legal/terms")}
                 >
                   <Text style={tw`text-xl font-semibold`}>
                     Términos y condiciones generales
                   </Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => Linking.openURL("https://www.google.com/")}
+                  onPress={() =>
+                    Linking.openURL(
+                      FRONTEND_URL + "/legal/vehicle-leasing-terms"
+                    )
+                  }
                 >
                   <Text style={tw`text-xl font-semibold`}>
                     Términos y condiciones particulares
                   </Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => Linking.openURL("https://www.google.com/")}
+                  onPress={() =>
+                    Linking.openURL(
+                      FRONTEND_URL + "/legal/personal-data-privacy"
+                    )
+                  }
                 >
                   <Text style={tw`text-xl font-semibold`}>
                     Política de privacidad

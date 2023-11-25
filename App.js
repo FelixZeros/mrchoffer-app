@@ -6,6 +6,7 @@ import AuthProvider from "./context/Auth/AuthState";
 import RegisterProvider from "./context/Register/RegisterState";
 import LoginScreen from "./screens/login";
 import ScreenRequesTrip from "./screens/portal/request/RequestTripScreen";
+import InfoRequestDriverScreen from "./screens/portal/request/InfoRequestDriverScreen";
 import FirstRegisterScreen from "./screens/register/FirstRegisterScreen";
 import SecondRegisterScreen from "./screens/register/SecondRegisterScreen";
 import ModalCamera from "./components/ModalCamera";
@@ -101,6 +102,14 @@ function App() {
                   <Stack.Screen
                     name="InfoRequestScreen"
                     component={ScreenRequesTrip}
+                    options={{
+                      headerShown: false,
+                      headerBackTitleVisible: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="InfoRequestDriverScreen"
+                    component={InfoRequestDriverScreen}
                     options={{
                       headerShown: false,
                       headerBackTitleVisible: false,

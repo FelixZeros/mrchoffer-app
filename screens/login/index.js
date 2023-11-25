@@ -29,6 +29,7 @@ export default function LoginScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
+    console.log(user);
     if (user) navigation.navigate("Portal");
   }, [user]);
 

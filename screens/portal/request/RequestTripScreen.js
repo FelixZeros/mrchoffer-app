@@ -11,7 +11,6 @@ export default function ScreenRequesTrip({ route, navigation }) {
   const { user, socket } = useContext(authContext);
   const { requestInfo } = route.params;
 
-  console.log(user.userId);
   // const requestInfo = {
   //   id: 1,
   //   origin: {
@@ -40,9 +39,9 @@ export default function ScreenRequesTrip({ route, navigation }) {
       socket.emit("client:accept-trip", {
         trip: requestInfo,
         driver: {
-          driverId: user.userId,
+          driverId: user?.id ?? user?.driver?.id,
           status: 2,
-          driverName: user.name,
+          driverName: user.name ?? user.driver.name,
           time: timeWait,
         },
       });
