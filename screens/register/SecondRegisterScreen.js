@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, SafeAreaView, ScrollView, Pressable } from "react-native";
-import { TextInputC, SelectInput, CameraInput } from "./Components/Inputs";
+import { TextInputC, SelectInputC, CameraInput } from "./Components/Inputs";
 import { dataTypeVehicle } from "../../utils/listCity";
 import useRegisterForm from "./Hooks/useRegisterForm";
 import tw from "twrnc";
@@ -9,6 +9,7 @@ export default function SecondRegisterScreen({ route, navigation }) {
   const {
     setNumberPropertyCard,
     setTypeVehicle,
+    setPlate,
     setBrand,
     setModel,
     setColor,
@@ -16,6 +17,8 @@ export default function SecondRegisterScreen({ route, navigation }) {
     setLine,
     setPhotoPropertyCardFront,
     setPhotoPropertyCardBack,
+    photoPropertyCardBack,
+    photoPropertyCardFront,
     error,
     eventSection,
   } = useRegisterForm(navigation);
@@ -43,7 +46,7 @@ export default function SecondRegisterScreen({ route, navigation }) {
           {error.typeVehicle && (
             <Text style={tw`text-red-500`}>Campo obligatorio</Text>
           )}
-          <SelectInput
+          <SelectInputC
             label="TIPO DE VEHÍCULO"
             setState={setTypeVehicle}
             data={dataTypeVehicle}
@@ -62,15 +65,28 @@ export default function SecondRegisterScreen({ route, navigation }) {
           {error.model && (
             <Text style={tw`text-red-500`}>Campo obligatorio</Text>
           )}
-          <TextInputC label="MODELO" setState={setModel} />
+          <TextInputC
+            keyboardType="numeric"
+            label="MODELO"
+            setState={setModel}
+          />
 
           {error.color && (
             <Text style={tw`text-red-500`}>Campo obligatorio</Text>
           )}
           <TextInputC label="COLOR" setState={setColor} />
+          {error.plate && (
+            <Text style={tw`text-red-500`}>Campo obligatorio</Text>
+          )}
+          <Text>La placa debe ir con el siguiente formato: "UVV-333"</Text>
+          <TextInputC label="PLACA" setState={setPlate} />
 
           {error.cc && <Text style={tw`text-red-500`}>Campo obligatorio</Text>}
-          <TextInputC label="CILINDRAJE" setState={setCc} />
+          <TextInputC
+            label="CILINDRAJE"
+            setState={setCc}
+            keyboardType="numeric"
+          />
 
           {error.photoPropertyCardBack && (
             <Text style={tw`text-red-500`}>No ha subido parte trasera</Text>
@@ -79,6 +95,9 @@ export default function SecondRegisterScreen({ route, navigation }) {
             <Text style={tw`text-red-500`}>No ha subido parte frontal</Text>
           )}
           <CameraInput
+            identification={identification}
+            front={photoPropertyCardFront}
+            back={photoPropertyCardBack}
             label="Tarjeta de propiedad"
             type="propertyCard"
             id={identification}

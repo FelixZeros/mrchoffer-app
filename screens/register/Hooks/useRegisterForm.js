@@ -6,6 +6,8 @@ const useRegisterForm = (navigation) => {
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [gender, setGender] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
   const [numberPropertyCard, setNumberPropertyCard] = useState("");
   const [typeVehicle, setTypeVehicle] = useState("");
   const [brand, setBrand] = useState("");
@@ -13,6 +15,10 @@ const useRegisterForm = (navigation) => {
   const [color, setColor] = useState("");
   const [cc, setCc] = useState("");
   const [line, setLine] = useState("");
+  const [department, setDepartment] = useState("Cesar");
+  const [plate, setPlate] = useState("");
+  const [verifyEmail, setVerifyEmail] = useState("");
+  const [verifyPassword, setVerifyPassword] = useState("");
   const [photoIdentificationFront, setPhotoIdentificationFront] = useState("");
   const [photoIdentificationBack, setPhotoIdentificationBack] = useState("");
   const [photoDriverLicenseFront, setPhotoDriverLicenseFront] = useState("");
@@ -38,6 +44,10 @@ const useRegisterForm = (navigation) => {
       }
       if (city.trim() === "") {
         setError({ city: true });
+        return;
+      }
+      if (department.trim() === "") {
+        setError({ department: true });
         return;
       }
       if (gender.trim() === "") {
@@ -77,6 +87,7 @@ const useRegisterForm = (navigation) => {
         identification,
         name,
         city,
+        department,
         gender,
         photoIdentificationFront,
         photoIdentificationBack,
@@ -98,6 +109,12 @@ const useRegisterForm = (navigation) => {
       if (typeVehicle.trim() === "") {
         setError({
           typeVehicle: true,
+        });
+        return;
+      }
+      if (plate.trim() === "") {
+        setError({
+          plate: true,
         });
         return;
       }
@@ -153,6 +170,7 @@ const useRegisterForm = (navigation) => {
         model,
         color,
         cc,
+        plate,
         line,
         photoPropertyCardFront,
         photoPropertyCardBack,
@@ -173,31 +191,74 @@ const useRegisterForm = (navigation) => {
         });
         return;
       }
+      if (verifyEmail.trim() === "") {
+        setError({
+          verifyEmail: true,
+          type: "required",
+        });
+        return;
+      }
+      if (verifyEmail !== email) {
+        setError({
+          verifyEmail: true,
+          type: "notEqual",
+        });
+        return;
+      }
       if (password.trim() === "") {
         setError({
           password: true,
         });
         return;
       }
+      if (verifyPassword.trim() === "") {
+        setError({
+          verifyPassword: true,
+          type: "required",
+        });
+        return;
+      }
+      if (verifyPassword !== password) {
+        setError({
+          verifyPassword: true,
+          type: "notEqual",
+        });
+        return;
+      }
 
       setError({});
-
       const res = nextSection(section, {
         phone,
         email,
         password,
       });
 
-      return res
+      if (res === false) {
+        setMessage("Húbo un problema al crear al usuario, intente de nuevo");
+        setIsOpen(true);
+      } else if (res === true) {
+        setMessage("Usuario creado con éxito");
+        setIsOpen(true);
+      }
     }
+  };
+  const handleDepartment = (value) => {
+    setDepartment(value);
+    setCity("");
   };
 
   return {
+    handleDepartment,
     setIdentification,
     setName,
     setCity,
     setGender,
     setNumberPropertyCard,
+    setDepartment,
+    setPlate,
+    setVerifyEmail,
+    setVerifyPassword,
+    department,
     setTypeVehicle,
     setBrand,
     setModel,
@@ -210,6 +271,15 @@ const useRegisterForm = (navigation) => {
     setPhotoDriverLicenseBack,
     setPhotoPropertyCardFront,
     setPhotoPropertyCardBack,
+    photoDriverLicenseBack,
+    photoDriverLicenseFront,
+    photoIdentificationBack,
+    photoIdentificationFront,
+    photoPropertyCardBack,
+    photoPropertyCardFront,
+    isOpen,
+    message,
+    setIsOpen,
     setPhone,
     setEmail,
     setPassword,

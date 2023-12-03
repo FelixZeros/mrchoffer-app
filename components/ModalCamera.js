@@ -109,7 +109,7 @@ export default function ModalCamera({ route, navigation }) {
         setPhotoOk(false);
         setPhoto(null);
         navigation.goBack();
-      }, 2000);
+      }, 3000);
     }
   }, [photoOk]);
 

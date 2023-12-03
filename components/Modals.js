@@ -105,12 +105,18 @@ export const ModalRecharge = ({ isOpen, setIsOpen }) => {
         style={tw`justify-center w-full h-full absolute bottom-0 bg-gray-600/30  backdrop-opacity-20]`}
       >
         <View
-          style={tw`flex flex-col bg-white mx-10 rounded-2xl min-h-[300px] items-center justify-center gap-4`}
+          style={tw`flex flex-col bg-white mx-10 rounded-2xl min-h-[300px] items-center justify-center gap-4 py-6`}
         >
+          <Image source={require("../assets/logoPay.png")} />
           <Text style={tw`text-center font-bold text-2xl`}>
             Puedes realizar la recarga en el punto físico de tu empresa
           </Text>
-          <Image source={require("../assets/logoPay.png")} />
+          <View
+            style={tw`flex flex-row items-center gap-2 border-[0.5px] border-[#D9D9D] rounded-lg py-2 px-4`}
+          >
+            <Text style={tw`text-xl font-bold`}>Enviar mensaje a </Text>
+            <Image source={require("../assets/ws.png")} />
+          </View>
           <Pressable
             onPress={() => setIsOpen(false)}
             style={tw`w-[120px] h-[40px] bg-[#FFCB44] mt-4 rounded-xl self-center flex flex-col justify-center`}

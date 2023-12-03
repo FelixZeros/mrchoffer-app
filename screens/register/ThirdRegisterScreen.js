@@ -13,18 +13,21 @@ import useRegisterForm from "./Hooks/useRegisterForm";
 import tw from "twrnc";
 
 export default function ThirdRegisterScreen({ navigation }) {
-  const { setPhone, setEmail, setPassword, error, eventSection } =
-    useRegisterForm(navigation);
+  const {
+    setPhone,
+    setEmail,
+    setPassword,
+    setVerifyEmail,
+    setVerifyPassword,
+    error,
+    eventSection,
+    setIsOpen,
+    isOpen,
+    message,
+  } = useRegisterForm(navigation);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const handleCreate = async () => {
-    const res = await eventSection(3);
-    console.log(res)
-    if( !res )setMessage('Húbo un problema al crear al usuario, intente de nuevo')
-    if(res) setMessage('Usuario creado con éxito')
-    setIsOpen(true);
+  const handleCreate = () => {
+    eventSection(3);
   };
 
   return (
@@ -40,7 +43,7 @@ export default function ThirdRegisterScreen({ navigation }) {
             <Text style={tw`text-red-500`}>Campo obligatorio</Text>
           )}
           <TextInputC
-            label="TELÉFONO"
+            label="WHATSAPP"
             setState={setPhone}
             keyboardType="numeric"
           />
@@ -49,17 +52,43 @@ export default function ThirdRegisterScreen({ navigation }) {
             <Text style={tw`text-red-500`}>Campo obligatorio</Text>
           )}
           <TextInputC
-            label="EMAIL"
+            label="CORREO ELECTRÓNICO"
             setState={setEmail}
             keyboardType="email-address"
           />
-
-          {error.password && (
+          {error.verifyEmail && error.type === "required" && (
             <Text style={tw`text-red-500`}>Campo obligatorio</Text>
+          )}
+
+          {error.verifyEmail && error.type === "notEqual" && (
+            <Text style={tw`text-red-500`}>Los correos no coinciden</Text>
+          )}
+
+          <TextInputC
+            label="REPETIR CORREO ELECTRÓNICO"
+            setState={setVerifyEmail}
+            keyboardType="email-address"
+          />
+
+          {error.password && error.type === "required" && (
+            <Text style={tw`text-red-500`}>Campo obligatorio</Text>
+          )}
+
+          {error.verifyPassword && error.type === "notEqual" && (
+            <Text style={tw`text-red-500`}>Las contraseñas no coinciden</Text>
           )}
           <TextInputC
             label="CONTRASEÑA"
             setState={setPassword}
+            keyboardType="default"
+            secureTextEntry={true}
+          />
+          {error.verifyPassword && (
+            <Text style={tw`text-red-500`}>Campo obligatorio</Text>
+          )}
+          <TextInputC
+            label="REPETIR CONTRASEÑA"
+            setState={setVerifyPassword}
             keyboardType="default"
             secureTextEntry={true}
           />
@@ -98,8 +127,8 @@ export default function ThirdRegisterScreen({ navigation }) {
               >
                 <Pressable
                   onPress={() => {
-                    setIsOpen(false)
-                    navigation.navigate("Login")
+                    setIsOpen(false);
+                    navigation.navigate("Login");
                   }}
                   style={tw`w-[120px] h-[50px] bg-[#FFCB44] rounded-xl self-center flex flex-col justify-center`}
                 >

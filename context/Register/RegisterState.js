@@ -12,6 +12,7 @@ const RegisterState = (props) => {
 
   const sendInfo = async (driver) => {
     try {
+      console.log(driver);
       await fetch(`${BACKEND_URL}/api/create-user`, {
         method: "POST",
         headers: {
@@ -38,6 +39,7 @@ const RegisterState = (props) => {
         identification: info.identification,
         name: info.name,
         city: info.city,
+        department: info.department,
         gender: info.gender,
         type: "driver",
         photoIdentificationFront: info.photoIdentificationFront,
@@ -52,6 +54,7 @@ const RegisterState = (props) => {
         numberPropertyCard: info.numberPropertyCard,
         typeVehicle: info.typeVehicle,
         brand: info.brand,
+        plate: info.plate,
         model: info.model,
         color: info.color,
         cc: info.cc,
@@ -68,15 +71,11 @@ const RegisterState = (props) => {
         email: info.email,
         password: info.password,
       };
-      try{
-        await sendInfo(state.driver)
-        console.log('no error')
-        return true;
-      }catch(err){
-        console.log('error')
-        return false
+      try {
+        return await sendInfo(state.driver);
+      } catch (err) {
+        return false;
       }
-      
     }
   };
 

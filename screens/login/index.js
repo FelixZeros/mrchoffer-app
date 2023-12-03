@@ -114,6 +114,7 @@ export default function LoginScreen({ navigation }) {
             </Text>
           </Pressable>
           <Pressable
+            disabled
             onPress={() => promptAsync()}
             style={({ pressed }) =>
               tw`${

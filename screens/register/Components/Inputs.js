@@ -16,8 +16,26 @@ export const TextInputC = ({ label, setState, ...rest }) => {
     </View>
   );
 };
+export const SelectInputD = ({ label, setState, data, ...rest }) => {
+  return (
+    <View>
+      <Dropdown
+        {...rest}
+        data={data}
+        search
+        searchPlaceholder="Buscar"
+        placeholderStyle={{ fontWeight: "600", fontSize: 14 }}
+        labelField="label"
+        valueField="value"
+        placeholder={label}
+        onChange={(e) => setState(e.label)}
+        style={tw`p-3 border border-gray-300 rounded-lg font-semibold`}
+      />
+    </View>
+  );
+};
 
-export const SelectInput = ({ label, setState, data, ...rest }) => {
+export const SelectInputC = ({ label, setState, data, ...rest }) => {
   return (
     <View>
       <Dropdown
@@ -37,6 +55,9 @@ export const SelectInput = ({ label, setState, data, ...rest }) => {
 };
 
 export const CameraInput = ({
+  identification,
+  front,
+  back,
   navigation,
   label,
   type,
@@ -56,7 +77,10 @@ export const CameraInput = ({
       <Text style={tw`font-bold text-base`}>{label}</Text>
       <View style={tw`flex flex-row justify-between`}>
         <Pressable
-          style={tw`flex flex-col items-center justify-center gap-1 border border-[#FFCB44] rounded-xl w-[160px] h-[57px] mt-3`}
+          style={tw`flex flex-col items-center justify-center gap-1 border border-[#FFCB44] rounded-xl w-[160px] h-[57px] mt-3 ${
+            front !== "" ? "bg-[#FFCB44]" : "bg-white"
+          }`}
+          disabled={identification === "" || front !== "" ? true : false}
           onPress={() =>
             navigation.navigate("modalCamera", {
               type: type,
@@ -73,7 +97,10 @@ export const CameraInput = ({
           <Text> + Parte frontal:</Text>
         </Pressable>
         <Pressable
-          style={tw`flex flex-col items-center justify-center gap-1 border border-[#FFCB44] rounded-xl w-[160px] h-[57px] mt-3`}
+          style={tw`flex flex-col items-center justify-center gap-1 border border-[#FFCB44] rounded-xl w-[160px] h-[57px] mt-3 ${
+            back !== "" ? "bg-[#FFCB44]" : "bg-white"
+          }`}
+          disabled={identification === "" || back !== "" ? true : false}
           onPress={() =>
             navigation.navigate("modalCamera", {
               type: type,

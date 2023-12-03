@@ -29,14 +29,13 @@ export default function FirstRegisterScreen({ navigation, route }) {
         companyId: request?.companyId,
         driverId: user?.id ?? user?.driver?.id,
         response: true,
-        status: 5,
+        status: 4,
         comment: "El conductor canceló la solicitud",
       }),
     });
     const data = await response.json();
     console.log(data);
     setIsOpen(false);
-    handleRefresh();
     navigation.navigate("Portal");
   }
 
