@@ -142,7 +142,7 @@ export const RequestScreen = ({ navigation }) => {
               <Text style={tw`font-semibold text-base`}>{trip.startTime}</Text>
               <View style={tw`flex flex-row gap-2 items-center`}>
                 <View
-                  style={tw`flex flex-row w-4 h-4 rounded-full bg-[#FFB800] justify-center items-center`}
+                  style={tw`flex flex-row w-5 h-5 rounded-full bg-[#FFB800] justify-center items-center`}
                 >
                   <Text style={tw` font-bold text-white`}>A</Text>
                 </View>
@@ -150,7 +150,7 @@ export const RequestScreen = ({ navigation }) => {
               </View>
               <View style={tw`flex flex-row gap-2 items-center`}>
                 <View
-                  style={tw`flex flex-row w-4 h-4 rounded-full bg-[#D2D2D2] justify-center items-center`}
+                  style={tw`flex flex-row w-5 h-5 rounded-full bg-[#D2D2D2] justify-center items-center`}
                 >
                   <Text style={tw` font-bold text-[#292929]`}>B</Text>
                 </View>

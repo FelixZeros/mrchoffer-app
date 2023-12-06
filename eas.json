@@ -4,6 +4,7 @@
   },
   "build": {
     "development": {
+      "developmentClient": true,
       "distribution": "internal",
       "android": {
         "gradleCommand": ":app:assembleDebug"
@@ -13,7 +14,14 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "env": {
+        "BACKEND_URL": "https//devmrchofferapi.devzeros.com",
+        "SOCKET_URL": "https://devmrchoffersocket.devzeros.com",
+        "API_KEY_GOOGLE_MAPS": "AIzaSyBEjehEkIFn2v5KMoOGery_454TWkkRIaY"
+      },
+      "android": {
+        "buildType": "apk"
+      }
     },
     "production": {}
   },

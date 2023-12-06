@@ -106,7 +106,7 @@ export const CompaniesScreen = ({ navigation }) => {
             headerShown: false,
             headerBackTitleVisible: false,
             tabBarShowLabel: false,
-            tabBarStyle: tw`absolute top-[100px] bg-transparent`,
+            tabBarStyle: tw`absolute top-[100px] bg-white`,
           }}
         >
           <Tab.Screen

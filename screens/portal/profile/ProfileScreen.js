@@ -31,26 +31,32 @@ export const ProfileScreen = () => {
         setIsOpen={setIsOpened}
         image={
           selected === 1
-            ? user?.photoDriverLicenseFront
-            : user?.photoDriverLicenseBack
+            ? user?.photoDriverLicenseFront ||
+              user?.driver?.photoDriverLicenseFront
+            : user?.photoDriverLicenseBack ||
+              user?.driver?.photoDriverLicenseBack
         }
       />
       <Image
         style={tw`rounded-full h-24 w-24`}
         source={
-          user?.photo
+          user?.photo || user?.driver?.photo
             ? {
                 uri: user?.photo,
               }
             : require("../../../assets/profile.png")
         }
       />
-      <Text style={tw`text-2xl font-bold mt-3`}>{user?.name}</Text>
+      <Text style={tw`text-2xl font-bold mt-3`}>
+        {user?.name || user?.driver?.name}
+      </Text>
 
       <View style={tw`my-10`}>
         <Image
           source={{
-            uri: user?.photoDriverLicenseFront,
+            uri:
+              user?.photoDriverLicenseFront ||
+              user?.driver?.photoDriverLicenseFront,
           }}
           style={tw`w-[350px] h-[250px] rounded-2xl`}
         />
@@ -58,7 +64,7 @@ export const ProfileScreen = () => {
 
       <View style={tw`flex flex-row justify-between w-full px-10`}>
         <Pressable
-          style={tw`border border-[#FFB800] rounded-lg px-1 py-3 w-[138px] shadow-md flex flex-col items-center gap-2`}
+          style={tw`border border-[#FFB800] rounded-lg px-1 py-3 w-[138px] flex flex-col items-center gap-2`}
           onPress={() => {
             setSelected(1);
             setIsOpened(true);
@@ -73,7 +79,7 @@ export const ProfileScreen = () => {
           </Text>
         </Pressable>
         <Pressable
-          style={tw`border border-[#FFB800] rounded-lg px-1 py-3 w-[138px] shadow-md flex flex-col items-center gap-2`}
+          style={tw`border border-[#FFB800] rounded-lg px-1 py-3 w-[138px] flex flex-col items-center gap-2`}
           onPress={() => {
             setSelected(2);
             setIsOpened(true);

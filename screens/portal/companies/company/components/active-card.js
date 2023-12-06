@@ -65,11 +65,11 @@ export const ActiveCard = ({ request, handleRefresh, navigation }) => {
               ? getTripsRequesStatus?.length
               : 0}
           </Text>
-          <View style={tw`flex flex-col absolute top-0 right-0`}>
+          <View style={tw`flex flex-col absolute -top-10 right-0 items-center`}>
             <Image
               source={{ uri: request?.company?.photo }}
-              width={50}
-              height={50}
+              width={70}
+              height={70}
               style={tw`rounded-full border-[0.5px] border-[#b4b4b4]`}
             />
             <Switch

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import MapView from "react-native-maps";
+import React, { useEffect, useRef, useState } from "react";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import { View, Text, Pressable, Image } from "react-native";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
-import { API_KEY_GOOGLE_MAPS, SOCKET_URL } from "@env";
+import { SOCKET_URL, API_KEY_GOOGLE_MAPS } from "@env";
 import { ModalCancelTrip, ModalCancel } from "../../../components/ModalTrip";
 import tw from "twrnc";
 import io from "socket.io-client";
@@ -56,7 +56,7 @@ export const ScreenSendRequest = ({ route, navigation }) => {
 
     getLocation();
 
-    const locationInterval = setInterval(getLocation, 5000);
+    const locationInterval = setInterval(getLocation, 2000);
 
     return () => {
       clearInterval(locationInterval);
@@ -171,10 +171,11 @@ export const ScreenSendRequest = ({ route, navigation }) => {
         </View>
       )}
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={tw`w-full h-[350px] md:h-[400px] lg:h-[500px]`}
         initialRegion={{
-          latitude: requestInfo.latitudeOrigin,
-          longitude: requestInfo.longitudeOrigin,
+          latitude: requestInfo?.latitudeOrigin,
+          longitude: requestInfo?.longitudeOrigin,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -182,23 +183,27 @@ export const ScreenSendRequest = ({ route, navigation }) => {
         zoomEnabled={true}
         zoomControlEnabled={true}
       >
-        <Marker
-          coordinate={{
-            latitude: requestInfo.latitudeOrigin,
-            longitude: requestInfo.longitudeOrigin,
-          }}
-          pinColor="orange"
-          title={requestInfo.textOrigin}
-        />
-        <Marker
-          coordinate={{
-            latitude: requestInfo.latitudeDestination,
-            longitude: requestInfo.longitudeDestination,
-          }}
-          pinColor="gray"
-          title={requestInfo.textDestination}
-        />
-        {!isArrived && (
+        {requestInfo?.latitudeOrigin && (
+          <>
+            <Marker
+              coordinate={{
+                latitude: requestInfo?.latitudeOrigin,
+                longitude: requestInfo?.longitudeOrigin,
+              }}
+              pinColor="orange"
+              title={requestInfo?.textOrigin}
+            />
+            <Marker
+              coordinate={{
+                latitude: requestInfo?.latitudeDestination,
+                longitude: requestInfo?.longitudeDestination,
+              }}
+              pinColor="gray"
+              title={requestInfo?.textDestination}
+            />
+          </>
+        )}
+        {!isArrived && location?.coords?.latitude && (
           <Marker
             coordinate={{
               latitude: location?.coords?.latitude,
@@ -207,39 +212,40 @@ export const ScreenSendRequest = ({ route, navigation }) => {
             pinColor="green"
           />
         )}
-        {!isArrived && (
+        {!isArrived && location?.coords?.latitude && (
           <MapViewDirections
+            apikey={API_KEY_GOOGLE_MAPS}
             origin={{
               latitude: location?.coords?.latitude,
               longitude: location?.coords?.longitude,
             }}
             destination={{
-              latitude: requestInfo.latitudeOrigin,
-              longitude: requestInfo.longitudeOrigin,
+              latitude: requestInfo?.latitudeOrigin,
+              longitude: requestInfo?.longitudeOrigin,
             }}
-            apikey={API_KEY_GOOGLE_MAPS}
             strokeWidth={3}
             strokeColor="green"
           />
         )}
         <MapViewDirections
+          apikey={API_KEY_GOOGLE_MAPS}
           origin={{
-            latitude: requestInfo.latitudeOrigin,
-            longitude: requestInfo.longitudeOrigin,
+            latitude: requestInfo?.latitudeOrigin,
+            longitude: requestInfo?.longitudeOrigin,
           }}
           destination={{
-            latitude: requestInfo.latitudeDestination,
-            longitude: requestInfo.longitudeDestination,
+            latitude: requestInfo?.latitudeDestination,
+            longitude: requestInfo?.longitudeDestination,
           }}
-          apikey={API_KEY_GOOGLE_MAPS}
           strokeWidth={3}
           strokeColor="#FFB800"
         />
       </MapView>
+
       <View style={tw`bg-[#292929] p-4 min-h-28 h-auto`}>
         <View style={tw`flex flex-row gap-2 items-center`}>
           <View
-            style={tw`flex flex-row w-4 h-4 rounded-full bg-[#FFB800] justify-center items-center`}
+            style={tw`flex flex-row w-5 h-5 rounded-full bg-[#FFB800] justify-center items-center`}
           >
             <Text style={tw` font-bold text-white`}>A</Text>
           </View>
@@ -249,7 +255,7 @@ export const ScreenSendRequest = ({ route, navigation }) => {
         </View>
         <View style={tw`flex flex-row gap-2 items-center`}>
           <View
-            style={tw`flex flex-row w-4 h-4 rounded-full bg-[#D2D2D2] justify-center items-center`}
+            style={tw`flex flex-row w-5 h-5 rounded-full bg-[#D2D2D2] justify-center items-center`}
           >
             <Text style={tw` font-bold text-[#292929]`}>B</Text>
           </View>

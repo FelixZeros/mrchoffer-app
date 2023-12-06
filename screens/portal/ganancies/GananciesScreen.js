@@ -80,7 +80,7 @@ export const GananciesScreen = () => {
   }, [company]);
 
   return (
-    <View style={tw`mt-26`}>
+    <ScrollView style={tw`mt-26`}>
       <View style={tw`shadow-lg rounded-lg  p-4 bg-white flex flex-col mx-8`}>
         <ModalSelectCompany
           isOpen={isOpenRequest}
@@ -88,7 +88,11 @@ export const GananciesScreen = () => {
           companies={companys}
           setCompany={setCompany}
         />
-        <ModalRecharge isOpen={isOpenRecharge} setIsOpen={setIsOpenRecharge} />
+        <ModalRecharge
+          isOpen={isOpenRecharge}
+          setIsOpen={setIsOpenRecharge}
+          phone={company?.phone}
+        />
         <View style={tw`flex flex-row gap-2 items-center`}>
           <Image source={require("../../../assets/bill.png")} />
           <Text style={tw`text-base font-medium`}>Saldo</Text>
@@ -125,11 +129,11 @@ export const GananciesScreen = () => {
       <View style={tw`flex flex-col pb-4 mt-10`}>
         <View style={tw`bg-[#292929] w-full py-2 flex flex-col gap-3 px-4`}>
           <View style={tw`flex flex-row items-center justify-center gap-4`}>
-            <Text style={tw`text-2xl font-bold text-white`}>Mis ingresos</Text>
+            <Text style={tw`text-lg font-bold text-white`}>Mis ingresos</Text>
             <Image source={require("../../../assets/cash.png")} />
           </View>
           <View style={tw`flex flex-row items-center justify-between gap-4`}>
-            <Text style={tw`text-2xl font-bold text-white`}>
+            <Text style={tw`text-lg font-bold text-white`}>
               {new Date().toLocaleString("es-CO", {
                 day: "numeric",
                 month: "long",
@@ -142,7 +146,7 @@ export const GananciesScreen = () => {
         </View>
       </View>
       <View>
-        <ScrollView style={tw`flex flex-col px-8`}>
+        <View style={tw`flex flex-col px-8 pb-30`}>
           {trips.map((trip, index) => (
             <View
               style={tw`border rounded-md border-gray-200 px-3 py-2 bg-white mt-4`}
@@ -151,7 +155,7 @@ export const GananciesScreen = () => {
               <Text style={tw`font-semibold text-base`}>{trip.startTime}</Text>
               <View style={tw`flex flex-row gap-2 items-center`}>
                 <View
-                  style={tw`flex flex-row w-4 h-4 rounded-full bg-[#FFB800] justify-center items-center`}
+                  style={tw`flex flex-row w-5 h-5 rounded-full bg-[#FFB800] justify-center items-center`}
                 >
                   <Text style={tw` font-bold text-white`}>A</Text>
                 </View>
@@ -159,7 +163,7 @@ export const GananciesScreen = () => {
               </View>
               <View style={tw`flex flex-row gap-2 items-center`}>
                 <View
-                  style={tw`flex flex-row w-4 h-4 rounded-full bg-[#D2D2D2] justify-center items-center`}
+                  style={tw`flex flex-row w-5 h-5 rounded-full bg-[#D2D2D2] justify-center items-center`}
                 >
                   <Text style={tw` font-bold text-[#292929]`}>B</Text>
                 </View>
@@ -205,8 +209,8 @@ export const GananciesScreen = () => {
               </Text>
             </View>
           ))}
-        </ScrollView>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };

@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "mrchoffer-movil",
+    "name": "MrChoffer",
     "slug": "mrchoffer-movil",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,10 +18,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.dafedev.mrchoffermovil"
+      "package": "com.dafedev.mrchoffermovil",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBEjehEkIFn2v5KMoOGery_454TWkkRIaY"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

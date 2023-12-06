@@ -56,11 +56,11 @@ export const PortalScreen = ({ navigation }) => {
               <View
                 style={tw`border-2 w-full py-4 my-4 flex flex-col items-center gap-3 border-gray-300`}
               >
-                <Text style={tw`text-2xl font-bold`}>Legal</Text>
+                <Text style={tw`text-2xl font-bold uppercase`}>Legal</Text>
                 <Pressable
                   onPress={() => Linking.openURL(FRONTEND_URL + "/legal/terms")}
                 >
-                  <Text style={tw`text-xl font-semibold`}>
+                  <Text style={tw`text-lg font-semibold`}>
                     Términos y condiciones generales
                   </Text>
                 </Pressable>
@@ -71,7 +71,7 @@ export const PortalScreen = ({ navigation }) => {
                     )
                   }
                 >
-                  <Text style={tw`text-xl font-semibold`}>
+                  <Text style={tw`text-lg font-semibold`}>
                     Términos y condiciones particulares
                   </Text>
                 </Pressable>
@@ -82,7 +82,7 @@ export const PortalScreen = ({ navigation }) => {
                     )
                   }
                 >
-                  <Text style={tw`text-xl font-semibold`}>
+                  <Text style={tw`text-lg font-semibold`}>
                     Política de privacidad
                   </Text>
                 </Pressable>

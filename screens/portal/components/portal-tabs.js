@@ -31,7 +31,7 @@ export const PortalTabs = () => {
               <View
                 style={tw`${
                   focused && "bg-[#FFCB44]"
-                } w-fit items-center justify-content-center rounded h-full  p-2`}
+                } w-fit items-center justify-content-center rounded h-full p-2 justify-center`}
               >
                 <Image
                   source={require("../../../assets/location-icon.png")}
@@ -56,7 +56,7 @@ export const PortalTabs = () => {
               <View
                 style={tw`${
                   focused && "bg-[#FFCB44]"
-                } w-fit items-center justify-content-center rounded h-full  py-2 px-6`}
+                } w-fit items-center justify-content-center rounded h-full  py-2 px-6 justify-center`}
               >
                 <Image
                   source={require("../../../assets/profile-icon.png")}
@@ -83,7 +83,7 @@ export const PortalTabs = () => {
               <View
                 style={tw`${
                   focused && "bg-[#FFCB44]"
-                } w-fit items-center justify-content-center rounded h-full  p-2`}
+                } w-fit items-center justify-content-center rounded h-full  p-2 justify-center`}
               >
                 <Image
                   source={require("../../../assets/company-icon.png")}
@@ -111,7 +111,7 @@ export const PortalTabs = () => {
               <View
                 style={tw`${
                   focused && "bg-[#FFCB44]"
-                } w-fit items-center justify-content-center rounded h-full  p-2`}
+                } w-fit items-center justify-content-center rounded h-full  p-2 justify-center`}
               >
                 <Image
                   source={require("../../../assets/dollar-icon.png")}

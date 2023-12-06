@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import MapView from "react-native-maps";
+import React, { useContext } from "react";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import { View, Text, Pressable, Image } from "react-native";
 import MapViewDirections from "react-native-maps-directions";
@@ -10,23 +10,6 @@ import authContext from "../../../context/Auth/AuthContext";
 export default function ScreenRequesTrip({ route, navigation }) {
   const { user, socket } = useContext(authContext);
   const { requestInfo } = route.params;
-
-  // const requestInfo = {
-  //   id: 1,
-  //   origin: {
-  //     text: "Transversal 27 # 19 A 60 Fundadores",
-  //     latitude: 10.45431755959867,
-  //     longitude: -73.26030616931199,
-  //   },
-  //   destination: {
-  //     text: "Mz 21 Casa 8 Villamiriam",
-  //     latitude: 10.449565,
-  //     longitude: -73.27002,
-  //   },
-  //   paymentMethod: "Nequi",
-  //   distance: "3 kM",
-  //   price: 3000,
-  // };
 
   const handleSendTime = (type) => {
     let timeWait = 0;
@@ -54,43 +37,43 @@ export default function ScreenRequesTrip({ route, navigation }) {
   return (
     <View style={tw`flex flex-col bg-black`}>
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={tw`w-full h-[350px] md:h-[400px] lg:h-[500px]`}
         initialRegion={{
-          latitude: requestInfo.latitudeOrigin,
-          longitude: requestInfo.longitudeOrigin,
+          latitude: requestInfo?.latitudeOrigin,
+          longitude: requestInfo?.longitudeOrigin,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
         minZoomLevel={13}
-        zoomEnabled={true}
         zoomControlEnabled={true}
       >
         <Marker
           coordinate={{
-            latitude: requestInfo.latitudeOrigin,
-            longitude: requestInfo.longitudeOrigin,
+            latitude: requestInfo?.latitudeOrigin,
+            longitude: requestInfo?.longitudeOrigin,
           }}
           pinColor="orange"
-          title={requestInfo.textOrigin}
+          title={requestInfo?.textOrigin}
         />
         <Marker
           coordinate={{
-            latitude: requestInfo.latitudeDestination,
-            longitude: requestInfo.longitudeDestination,
+            latitude: requestInfo?.latitudeDestination,
+            longitude: requestInfo?.longitudeDestination,
           }}
           pinColor="gray"
-          title={requestInfo.textDestination}
+          title={requestInfo?.textDestination}
         />
         <MapViewDirections
+          apikey={API_KEY_GOOGLE_MAPS}
           origin={{
-            latitude: requestInfo.latitudeOrigin,
-            longitude: requestInfo.longitudeOrigin,
+            latitude: requestInfo?.latitudeOrigin,
+            longitude: requestInfo?.longitudeOrigin,
           }}
           destination={{
-            latitude: requestInfo.latitudeDestination,
-            longitude: requestInfo.longitudeDestination,
+            latitude: requestInfo?.latitudeDestination,
+            longitude: requestInfo?.longitudeDestination,
           }}
-          apikey={API_KEY_GOOGLE_MAPS}
           strokeWidth={3}
           strokeColor="#FFB800"
         />
@@ -98,7 +81,7 @@ export default function ScreenRequesTrip({ route, navigation }) {
       <View style={tw`bg-[#292929] p-4 min-h-28 h-auto`}>
         <View style={tw`flex flex-row gap-2 items-center`}>
           <View
-            style={tw`flex flex-row w-4 h-4 rounded-full bg-[#FFB800] justify-center items-center `}
+            style={tw`flex flex-row w-5 h-5 rounded-full bg-[#FFB800] justify-center items-center `}
           >
             <Text style={tw` font-bold text-white`}>A</Text>
           </View>
@@ -108,7 +91,7 @@ export default function ScreenRequesTrip({ route, navigation }) {
         </View>
         <View style={tw`flex flex-row gap-2 items-center`}>
           <View
-            style={tw`flex flex-row w-4 h-4 rounded-full bg-[#D2D2D2] justify-center items-center`}
+            style={tw`flex flex-row w-5 h-5 rounded-full bg-[#D2D2D2] justify-center items-center`}
           >
             <Text style={tw` font-bold text-[#292929]`}>B</Text>
           </View>

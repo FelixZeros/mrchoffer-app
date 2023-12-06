@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { Linking } from "react-native";
 import tw from "twrnc";
 
 export const ModalImage = ({ isOpen, image, setIsOpen }) => {
@@ -98,7 +99,7 @@ export const ModalSelectCompany = ({
   );
 };
 
-export const ModalRecharge = ({ isOpen, setIsOpen }) => {
+export const ModalRecharge = ({ phone, isOpen, setIsOpen }) => {
   return (
     <Modal animationType="slide" transparent={true} visible={isOpen}>
       <View
@@ -108,15 +109,16 @@ export const ModalRecharge = ({ isOpen, setIsOpen }) => {
           style={tw`flex flex-col bg-white mx-10 rounded-2xl min-h-[300px] items-center justify-center gap-4 py-6`}
         >
           <Image source={require("../assets/logoPay.png")} />
-          <Text style={tw`text-center font-bold text-2xl`}>
+          <Text style={tw`text-center font-bold text-xl`}>
             Puedes realizar la recarga en el punto físico de tu empresa
           </Text>
-          <View
+          <Pressable
             style={tw`flex flex-row items-center gap-2 border-[0.5px] border-[#D9D9D] rounded-lg py-2 px-4`}
+            onPress={() => Linking.openURL(`https://wa.me/57${phone}`)}
           >
-            <Text style={tw`text-xl font-bold`}>Enviar mensaje a </Text>
+            <Text style={tw`text-lgs font-bold`}>Enviar mensaje a </Text>
             <Image source={require("../assets/ws.png")} />
-          </View>
+          </Pressable>
           <Pressable
             onPress={() => setIsOpen(false)}
             style={tw`w-[120px] h-[40px] bg-[#FFCB44] mt-4 rounded-xl self-center flex flex-col justify-center`}
