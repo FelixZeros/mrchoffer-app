@@ -55,6 +55,7 @@ export const DriverTripScreen = ({ navigation, route }) => {
 
     socket.emit("client:finish-trip", {
       id: driverInfo.id,
+      phoneNumber: driverInfo.phoneNumber,
     });
     setIsLocationUpdating(false);
 

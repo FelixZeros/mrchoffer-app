@@ -66,6 +66,7 @@ export const ScreenSendRequest = ({ route, navigation }) => {
   const handleFinishTrip = () => {
     socket.emit("client:finish-trip", {
       id: requestInfo?.idFront,
+      phoneNumber: requestInfo?.phoneNumber,
     });
     setIsLocationUpdating(false);
 
@@ -101,6 +102,7 @@ export const ScreenSendRequest = ({ route, navigation }) => {
       clearInterval(intervalRef.current);
       socket.emit("client:arrived-trip", {
         tripinfo: requestInfo.idFront,
+        phoneNumber: requestInfo.phoneNumber,
       });
       setFormatedTime("00:00");
     }
@@ -121,6 +123,7 @@ export const ScreenSendRequest = ({ route, navigation }) => {
     if (type === "isArrived") {
       socket.emit("client:arrived-trip", {
         tripinfo: requestInfo.idFront,
+        phoneNumber: requestInfo.phoneNumber,
       });
       setIsArrived(true);
       clearInterval(intervalRef.current);
